@@ -78,6 +78,21 @@ impl WindowFlag {
             _ => None,
         }
     }
+    pub const fn to_byte(&self) -> u8 {
+        match self {
+            WindowFlag::Async => b'a',
+            WindowFlag::Back => b'b',
+            WindowFlag::Front => b'f',
+            WindowFlag::Hidden => b'h',
+            WindowFlag::Borderless => b'l',
+            WindowFlag::Maximized => b'm',
+            WindowFlag::Fullscreen => b'M',
+            WindowFlag::Resizable => b'r',
+            WindowFlag::Scalable => b's',
+            WindowFlag::Transparent => b't',
+            WindowFlag::Unclosable => b'u',
+        }
+    }
     const fn max_u64() -> u64 {
         // TODO: use https://github.com/rust-lang/rust/issues/73662
         WindowFlag::Scalable.to_u64()

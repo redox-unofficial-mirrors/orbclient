@@ -348,6 +348,47 @@ impl Window {
         self.window_async = is_async;
     }
 
+    /// Set window flag
+    pub fn set_flag(&mut self, flag: WindowFlag, value: bool) {
+        match flag {
+            WindowFlag::Async => self.set_async(value),
+            WindowFlag::Back => {}
+            WindowFlag::Front => self.inner.window_mut().set_always_on_top(value),
+            WindowFlag::Hidden => {
+                if value {
+                    self.inner.window_mut().hide()
+                } else {
+                    self.inner.window_mut().show()
+                }
+            }
+            WindowFlag::Borderless => self.inner.window_mut().set_bordered(!value),
+            WindowFlag::Maximized => {
+                if value {
+                    self.inner.window_mut().maximize()
+                } else {
+                    self.inner.window_mut().restore()
+                }
+            }
+            WindowFlag::Fullscreen => {
+                let _ = if value {
+                    self.inner
+                        .window_mut()
+                        .set_fullscreen(sdl2::video::FullscreenType::True)
+                } else {
+                    self.inner
+                        .window_mut()
+                        .set_fullscreen(sdl2::video::FullscreenType::Off)
+                };
+            }
+            WindowFlag::Resizable => {
+                self.inner.window_mut().set_resizable(value);
+            }
+            WindowFlag::Scalable => {}
+            WindowFlag::Transparent => {}
+            WindowFlag::Unclosable => {}
+        }
+    }
+
     /// Set cursor visibility
     pub fn set_mouse_cursor(&mut self, visible: bool) {
         self.sdl().mouse().show_cursor(visible);

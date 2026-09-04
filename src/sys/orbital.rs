@@ -309,6 +309,21 @@ impl Window {
             .write(if is_async { b"A,1" } else { b"A,0" });
     }
 
+    /// Set window flag
+    pub fn set_flag(&mut self, flag: WindowFlag, value: bool) {
+        let bytes = [
+            b'F',
+            b',',
+            flag.to_byte(),
+            b',',
+            if value { b'1' } else { b'0' },
+        ];
+        let _ = self.file_mut().write(&bytes);
+        if matches!(flag, WindowFlag::Maximized | WindowFlag::Fullscreen) {
+            self.sync_path();
+        }
+    }
+
     /// Set cursor visibility upon the window
     pub fn set_mouse_cursor(&mut self, visible: bool) {
         let _ = self

@@ -305,8 +305,13 @@ impl Window {
             .and_then(|(k, s)| Some((*k, CString::from_str(s.as_str()).ok()?)))
     }
 
-    pub fn pop_drop_content(&self) -> Option<(MediaKind, String)> {
-        self.drop_content.borrow_mut().take()
+    pub fn pop_drop_content(&self) -> bool {
+        self.drop_content.borrow_mut().take().is_some()
+    }
+
+    pub fn set_drop_accept(&mut self, _accept: bool) -> bool {
+        // SDL2 crate does not support dragging
+        false
     }
 
     pub fn sync_path(&mut self) {
